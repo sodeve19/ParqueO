@@ -6,10 +6,10 @@ class ParkingGaragesController < ApplicationController
   def index
     @parking_garages = ParkingGarage.all
     @users = User.all
-    @hash = Gmaps4rails.build_markers(@parking_garages) do |parking_garage, marker|
-      marker.lat parking_garage.latitude
-      marker.lng parking_garage.longitude
-    end
+    # @hash = Gmaps4rails.build_markers(@users) do |user, marker|
+    #   marker.lat user.latitude
+    #   marker.lng user.longitude
+    # end
     
     # if params[:search].present?
     #   @locations = Location.near(params[:search], 50, :order => :distance)
@@ -21,6 +21,7 @@ class ParkingGaragesController < ApplicationController
   # GET /parking_garages/1
   # GET /parking_garages/1.json
   def show
+    @parking_garage = ParkingGarage.find(params[:id])
   end
 
   # GET /parking_garages/new
@@ -81,5 +82,6 @@ class ParkingGaragesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def parking_garage_params
       params[:parking_garage]
+      params.require(:parking_garage).permit(:latitude,:longitude,:priceperhour,:priceperday)
     end
 end
