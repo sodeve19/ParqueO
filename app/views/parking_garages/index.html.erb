@@ -2,17 +2,20 @@
 
 <h1>Listing Parking Garages</h1>
 
-<div class="container" style='width: 800px;'>
-  <div id="map" style='width: 800px; height: 400px;'>
+<div class="container" style='width: 100vw;'>
+  <div id="map" style='height: 700px;'>
 
   </div>
 </div>
 
 <table>
   <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
+    <% @parking_garages.each do |parking_garage| %>
+      <tr>
+        <td><%= parking_garage.latitude %></td>
+        <td><%= parking_garage.longitude %></td>
+      </tr>
+    <% end %>
   </thead>
 
   <tbody>

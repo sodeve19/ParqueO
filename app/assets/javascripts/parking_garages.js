@@ -49,9 +49,9 @@ $(document).on("ready page:load", function() {
 
 
   $.get("/parking_garages", function( data ) {
-  
+    console.log("after get")
     for(var i = 0; i < data.length; i++) {
-    
+      console.log(i)
       var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
       
       var marker = new google.maps.Marker({

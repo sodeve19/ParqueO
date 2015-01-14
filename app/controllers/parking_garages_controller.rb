@@ -4,9 +4,16 @@ class ParkingGaragesController < ApplicationController
   # GET /parking_garages
   # GET /parking_garages.json
   def index
-    @parking_garages = ParkingGarage.all
-    # @parking_garages = ParkingGarage.near(,50)
-    @users = User.all
+    # 6.215725, -75.596976 LEJOS  
+    # 6.209475, -75.571580 CERCA
+    if Rails.env.development?
+      location = [6.209475, -75.571580]
+      #@parking_garages = ParkingGarage.all
+    else
+      user_location = request.location
+      location = [user_location.latitude, user_location.longitude]
+    end
+    @parking_garages = ParkingGarage.near(location, 1, :units => :km)
     # @hash = Gmaps4rails.build_markers(@users) do |user, marker|
     #   marker.lat user.latitude
     #   marker.lng user.longitude
