@@ -1,23 +1,28 @@
 //# Place all the behaviors and hooks related to the matching controller here.
 //# All this logic will automatically be available in application.js.
+var map;
+var service;
+var infowindow;
+var myLatlng;
+
 
 $(document).on("ready page:load", function() {
 
-  if(navigator.geolocation) {
-
-    map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      zoom: 15
+      zoom: 16
     });
 
+  if(navigator.geolocation) { 
+
     navigator.geolocation.getCurrentPosition(function(position) {
-      var myLatlng = new google.maps.LatLng(position.coords.latitude,
+      myLatlng = new google.maps.LatLng(position.coords.latitude,
                                             position.coords.longitude);
 
       var infowindow = new google.maps.InfoWindow({
         map: map,
         position: myLatlng,
-        content: 'Location found using HTML5.'
+        content: 'You are here'
       });
 
       map.setCenter(myLatlng);
@@ -27,29 +32,32 @@ $(document).on("ready page:load", function() {
   } else {
     // Browser doesnt support Geolocation
     handleNoGeolocation(false);
-  }
+  };
 
-  /* var myLatlng = new google.maps.LatLng(6.209851, -75.573120);
-  map = new google.maps.Map(document.getElementById('map'), {
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: myLatlng,
-    zoom: 15
-  });
+  // var myLatlng = new google.maps.LatLng(6.209851, -75.573120);
+  // map = new google.maps.Map(document.getElementById('map'), {
+  //   mapTypeId: google.maps.MapTypeId.ROADMAP,
+  //   center: myLatlng,
+  //   zoom: 15
+  // });
 
   var request = {
     location: myLatlng,
     radius: '500',
     types: ['store']
-  }; */
+  }; 
 
 
-  $.get( "", function( data ) {
+  $.get("/parking_garages", function( data ) {
+  
     for(var i = 0; i < data.length; i++) {
+    
       var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
       
       var marker = new google.maps.Marker({
         position: ParLatlng,
         map: map,
+        animation: google.maps.Animation.DROP,
         title:"Hello World!"
       });
 
@@ -66,9 +74,7 @@ $(document).on("ready page:load", function() {
   }, "json");
 });
 
-var map;
-var service;
-var infowindow;
+
 //var myLatlng;
 
 

@@ -5,6 +5,7 @@ class ParkingGaragesController < ApplicationController
   # GET /parking_garages.json
   def index
     @parking_garages = ParkingGarage.all
+    # @parking_garages = ParkingGarage.near(,50)
     @users = User.all
     # @hash = Gmaps4rails.build_markers(@users) do |user, marker|
     #   marker.lat user.latitude
