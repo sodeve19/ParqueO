@@ -1,34 +1,36 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Listing Parking Garages</h1>
 
-<div class="container" style='width: 100vw;'>
-  <div id="map" style='height: 700px;'>
+<!--p id="notice"><%= notice %></p-->
+
+<!--h1>Listing Parking Garages</h1-->
+
+<div class="container" style='width: 100vw; padding: 0;'>
+  <div id="map" style='height: calc(100vh - 80px);'>
 
   </div>
 </div>
 
-<table>
+<!-- <table>
   <thead>
-    <% @parking_garages.each do |parking_garage| %>
+    <#% @parking_garages.each do |parking_garage| %>
       <tr>
-        <td><%= parking_garage.latitude %></td>
-        <td><%= parking_garage.longitude %></td>
+        <td><%#= parking_garage.latitude %></td>
+        <td><%#= parking_garage.longitude %></td>
       </tr>
-    <% end %>
+    <#% end %>
   </thead>
 
   <tbody>
-    <% @parking_garages.each do |parking_garage| %>
+    <#% @parking_garages.each do |parking_garage| %>
       <tr>
-        <td><%= link_to 'Show', parking_garage %></td>
-        <td><%= link_to 'Edit', edit_parking_garage_path(parking_garage) %></td>
-        <td><%= link_to 'Destroy', parking_garage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%#= link_to 'Show', parking_garage %></td>
+        <td><%#= link_to 'Edit', edit_parking_garage_path(parking_garage) %></td>
+        <td><%#= link_to 'Destroy', parking_garage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
+    <#% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Parking garage', new_parking_garage_path %>
+<%#= link_to 'New Parking garage', new_parking_garage_path %> -->

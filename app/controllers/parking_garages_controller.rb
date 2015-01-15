@@ -6,15 +6,16 @@ class ParkingGaragesController < ApplicationController
   def index
     # 6.215725, -75.596976 LEJOS  
     # 6.209475, -75.571580 CERCA
-    location = [6.209475, -75.571580]
+    location = [params[:latitude], params[:longitude]]
 
-    if request && request.location
-      user_location = request.location
-      location = [user_location.latitude, user_location.longitude]
-    else
-      flash[:notice] = "No se pudo determinar su ubicación actual..."
-    end
-    flash
+    # if request && request.location
+    #   user_location = request.location
+    #   location = [user_location.latitude, user_location.longitude]
+    # else
+    #   flash[:notice] = "No se pudo determinar su ubicación actual..."
+    # end
+    # flash
+    # @parking_garages = ParkingGarage.all
     @parking_garages = ParkingGarage.near(location, 1, :units => :km)
     # @hash = Gmaps4rails.build_markers(@users) do |user, marker|
     #   marker.lat user.latitude

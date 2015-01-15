@@ -13,6 +13,15 @@
 </head>
 <body>
 
+<%= render 'pages/nav' %>
+
+<% if flash[:error] -%>
+  <p class='error alert alert-danger'><%=h flash[:error] %></p>
+<% end -%>
+<% if flash[:notice] -%>
+  <p class='notice alert alert-success'><%=h flash[:notice] %></p>
+<% end -%>
+
 <%= yield %>
 
 </body>

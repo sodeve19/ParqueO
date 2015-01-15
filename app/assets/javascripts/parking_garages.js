@@ -4,13 +4,13 @@ var map;
 var service;
 var infowindow;
 var myLatlng;
-
+var parking_garages_link;
 
 $(document).on("ready page:load", function() {
 
   map = new google.maps.Map(document.getElementById('map'), {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      zoom: 16
+      zoom: 17
     });
 
   if(navigator.geolocation) { 
@@ -18,7 +18,8 @@ $(document).on("ready page:load", function() {
     navigator.geolocation.getCurrentPosition(function(position) {
       myLatlng = new google.maps.LatLng(position.coords.latitude,
                                             position.coords.longitude);
-
+      parking_garages_link = "/parking_garages?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude;
+  
       var infowindow = new google.maps.InfoWindow({
         map: map,
         position: myLatlng,
@@ -47,11 +48,10 @@ $(document).on("ready page:load", function() {
     types: ['store']
   }; 
 
-
-  $.get("/parking_garages", function( data ) {
-    console.log("after get")
+  $.get(parking_garages_link, function( data ) {
+    console.log(data);
     for(var i = 0; i < data.length; i++) {
-      console.log(i)
+      console.log(i);
       var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
       
       var marker = new google.maps.Marker({
