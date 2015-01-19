@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'taxi/taxi_cost_estimation'
+
   devise_for :users
   resources :parking_garages
   get 'parking' => 'parking_garages#index_no_search'
