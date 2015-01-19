@@ -6,6 +6,7 @@ var infowindow;
 var myLatlng;
 var parking_garages_link;
 var markers = [];
+var place;
 
 $(document).on("ready page:load", function() {
 
@@ -42,6 +43,8 @@ $(document).on("ready page:load", function() {
             animation: google.maps.Animation.DROP,
             title:"Hello World!"
           });
+
+          markers.push(marker);
 
           google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
@@ -95,7 +98,7 @@ $(document).on("ready page:load", function() {
         anchor: new google.maps.Point(17, 34),
         scaledSize: new google.maps.Size(25, 25)
       };
-
+      deleteMarkers();
       // Create a marker for each place.
       var marker = new google.maps.Marker({
         map: map,
@@ -107,9 +110,43 @@ $(document).on("ready page:load", function() {
       markers.push(marker);
 
       bounds.extend(place.geometry.location);
+      console.log(place.geometry.location.k);
+
+      console.log(place.geometry.location.D);
+
+      $.get("/parking_garages", { latitude: place.geometry.location.k, longitude: place.geometry.location.D } , function( data ) {
+        console.log(data);
+
+        for(var i = 0; i < data.length; i++) {
+          console.log(data[i]);
+          var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+          
+          var marker = new google.maps.Marker({
+            position: ParLatlng,
+            map: map,
+            animation: google.maps.Animation.DROP,
+            title:"Hello World!"
+          });
+
+          markers.push(marker);
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(data[i]);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        };
+      }, "json");
+
     }
 
     map.fitBounds(bounds);
+
+    var listener = google.maps.event.addListener(map, "idle", function() { 
+      if (map.getZoom() > 16) map.setZoom(16); 
+      google.maps.event.removeListener(listener); 
+    });
   });
   // [END region_getplaces]
 
@@ -122,6 +159,8 @@ $(document).on("ready page:load", function() {
 
 
   //--------- END OF INPUT SEARCH
+
+  
 
   var request = {
     location: myLatlng,
@@ -182,6 +221,24 @@ function handleNoGeolocation(errorFlag) {
   var infowindow = new google.maps.InfoWindow(options);
   map.setCenter(options.position);
 }
+
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  console.log("markers =" + markers + "!!!");
+  markers = [];
+}
+
 
 //google.maps.event.addDomListener(window, 'load', initialize);
 

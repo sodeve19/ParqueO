@@ -29,6 +29,14 @@ class ParkingGaragesController < ApplicationController
     # end
   end
 
+  def index_no_search
+    # 6.215725, -75.596976 LEJOS  
+    # 6.209475, -75.571580 CERCA
+    location = [params[:latitude], params[:longitude]]
+    @parking_garages = ParkingGarage.near(location, 1, :units => :km)
+
+  end
+
   # GET /parking_garages/1
   # GET /parking_garages/1.json
   def show

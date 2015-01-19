@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :parking_garages
-
+  get 'parking' => 'parking_garages#index_no_search'
   get 'pages/home'
 
   # The priority is based upon order of creation: first created -> highest priority.
