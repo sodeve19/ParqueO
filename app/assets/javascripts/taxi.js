@@ -1,6 +1,5 @@
-//# Place all the behaviors and hooks related to the matching controller here.
-//# All this logic will automatically be available in application.js.
-
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
 var map;
 var service;
 var infowindow;
@@ -8,25 +7,27 @@ var myLatlng;
 var parking_garages_link;
 var markers = [];
 var place;
-
-function ParkingLots(){
+var start;
+var end;
 
 //$(document).on("ready page:load", function() {
+function TaxiDirections(){
 
-  console.log("parking_garages java");
+  console.log("taxi js");
 
+  directionsDisplay = new google.maps.DirectionsRenderer();
   map = new google.maps.Map(document.getElementById('map'), {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       zoom: 16
     });
-
+  directionsDisplay.setMap(map);
   if(navigator.geolocation) { 
 
     navigator.geolocation.getCurrentPosition(function(position) {
       myLatlng = new google.maps.LatLng(position.coords.latitude,
                                             position.coords.longitude);
-      parking_garages_link = "/parking_garages?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude;
-  
+      start = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      
       var infowindow = new google.maps.InfoWindow({
         map: map,
         position: myLatlng,
@@ -35,34 +36,7 @@ function ParkingLots(){
 
       map.setCenter(myLatlng);
 
-      // ------- AÑADO GET
-      $.get("/parking_garages", { latitude: position.coords.latitude, longitude: position.coords.longitude } , function( data ) {
-        console.log(data);
-        for(var i = 0; i < data.length; i++) {
-          console.log(data[i]);
-          var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
-          
-          var marker = new google.maps.Marker({
-            position: ParLatlng,
-            map: map,
-            animation: google.maps.Animation.DROP,
-            title:"Hello World!"
-          });
-
-          markers.push(marker);
-
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(data[i]);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
-        };
-      }, "json");
-      
-      // ------- FIN GET
-
-
+      //-- Iba un GET
 
     }, function() {
       handleNoGeolocation(true);
@@ -115,10 +89,9 @@ function ParkingLots(){
       markers.push(marker);
 
       bounds.extend(place.geometry.location);
-      console.log(place.geometry.location.k);
-
-      console.log(place.geometry.location.D);
-
+      end = new google.maps.LatLng(place.geometry.location.k, place.geometry.location.D);
+      calcRoute();
+      
       $.get("/parking_garages", { latitude: place.geometry.location.k, longitude: place.geometry.location.D } , function( data ) {
         console.log(data);
 
@@ -172,79 +145,66 @@ function ParkingLots(){
     radius: '500',
     types: ['store']
   }; 
-  // console.log("hola sorel!!!")
-  // $.get(parking_garages_link, function( data ) {
-  //   console.log(data);
-  //   for(var i = 0; i < data.length; i++) {
-  //     console.log(i);
-  //     var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
-      
-  //     var marker = new google.maps.Marker({
-  //       position: ParLatlng,
-  //       map: map,
-  //       animation: google.maps.Animation.DROP,
-  //       title:"Hello World!"
-  //     });
-
-  //     google.maps.event.addListener(marker, 'click', (function(marker, i) {
-  //       return function() {
-  //         infowindow.setContent(data[i]);
-  //         infowindow.open(map, marker);
-  //       }
-  //     })(marker, i));
-
-  //     service = new google.maps.places.PlacesService(map);
-  //     service.search(request, callback);
-  //   };
-  // }, "json");
-//});
 
 }
 
-function callback(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      var place = results[i];
-      createMarker(results[i]);
-    }
-  }
-}
 
-function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
-
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(60, 105),
-    content: content
+function calcRoute() {
+  // var start = document.getElementById('start').value;
+  // var end = document.getElementById('end').value;
+  var request = {
+      origin:start,
+      destination:end,
+      travelMode: google.maps.TravelMode.DRIVING
   };
 
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+
+      $('#taxi').addClass('index-z');
+      // Display the distance:
+     document.getElementById('distance').innerHTML = 
+        "<strong>Distancia: </strong>" + Math.round(response.routes[0].legs[0].distance.value / 1000) + " km";
+
+     // Display the duration:
+     document.getElementById('duration').innerHTML = 
+        "<strong>Duración: </strong>" + Math.round(response.routes[0].legs[0].duration.value / 60 ) + " mins";
+
+      var time = (response.routes[0].legs[0].duration.value / 60 );
+      var distance = (response.routes[0].legs[0].distance.value / 78);
+
+      var costo = (2.700 + (distance * 83));
+
+      if (costo < 4700) {
+        costo = 4700;
+      }
+
+      document.getElementById('taxi-dis').innerHTML =
+        "<strong>Costo del taxi: </strong>" + Math.round(costo) + " pesos";
+
+
+      directionsDisplay.setDirections(response);
+    } else {
+      console.log(status);
+    }
+  });
 }
 
-function setAllMap(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-  }
-}
-
-function clearMarkers() {
-  setAllMap(null);
-}
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-  clearMarkers();
-  console.log("markers =" + markers + "!!!");
-  markers = [];
-}
 
 
 
-//google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
