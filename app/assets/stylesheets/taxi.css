@@ -1,0 +1,10 @@
+.panel-taxi {
+  position: absolute;
+  /*z-index: 10;*/
+  right: 5%;
+  top: 20%;
+}
+
+.index-z {
+  z-index: 10;
+}

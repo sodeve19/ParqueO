@@ -4,14 +4,31 @@
 
 <!--h1>Listing Parking Garages</h1-->
 
-<div class="container" style='width: 100vw; padding: 0;'>
-  <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+  <div class="container" style="width: 100vw; padding: 0"> <!--style='width: calc(100vw - 300px); padding: 0;'-->
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    
+
+    <div class="panel panel-default col-md-3 panel-taxi" id="taxi">
+      <div class="panel-body">
+        <div id="duration"></div> 
+        <div id="distance"></div>
+        <div id="taxi-dis"></div>
+      </div>
+    </div>
 
 
-  <div id="map" style='height: calc(100vh - 80px);'>
+    <div id="map" style='height: calc(100vh - 80px);'></div>
+
+    
+
 
   </div>
-</div>
+
+
+<script>
+  ParkingLots();
+  TaxiDirections();
+</script> 
 
 <!-- <table>
   <thead>
