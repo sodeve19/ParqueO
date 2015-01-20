@@ -9,6 +9,7 @@ var parking_garages_link;
 var markers = [];
 var place;
 
+
 function ParkingLots(){
 
 //$(document).on("ready page:load", function() {
@@ -27,11 +28,19 @@ function ParkingLots(){
                                             position.coords.longitude);
       parking_garages_link = "/parking_garages?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude;
   
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
+      // var infowindow = new google.maps.InfoWindow({
+      //   map: map,
+      //   position: myLatlng,
+      //   content: 'You are here'
+      // });
+
+      var myPosition = new google.maps.Marker({
         position: myLatlng,
-        content: 'You are here'
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/arrow.png',
+        title:'You are here'
       });
+
 
       map.setCenter(myLatlng);
 
@@ -45,18 +54,21 @@ function ParkingLots(){
           var marker = new google.maps.Marker({
             position: ParLatlng,
             map: map,
+            icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
             animation: google.maps.Animation.DROP,
-            title:"Hello World!"
+            title: data[i].name
           });
 
           markers.push(marker);
 
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(data[i]);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
+          google.maps.event.addListener(marker, 'click', function() {
+              var infowindow = new google.maps.InfoWindow({
+                content: this.title
+              });
+
+              infowindow.open(map, this);
+              console.log(this.title);
+          });//(marker, i));
         };
       }, "json");
       
@@ -129,18 +141,22 @@ function ParkingLots(){
           var marker = new google.maps.Marker({
             position: ParLatlng,
             map: map,
+            icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
             animation: google.maps.Animation.DROP,
-            title:"Hello World!"
+            draggable:true,
+            title: data[i].name
           });
 
           markers.push(marker);
 
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(data[i]);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
+          google.maps.event.addListener(marker, 'click', function() {
+              var infowindow = new google.maps.InfoWindow({
+                content: this.title
+              });
+
+              infowindow.open(map, this);
+              console.log(this.title);
+          });
         };
       }, "json");
 

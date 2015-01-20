@@ -28,11 +28,11 @@ function TaxiDirections(){
                                             position.coords.longitude);
       start = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: myLatlng,
-        content: 'You are here'
-      });
+      // var infowindow = new google.maps.InfoWindow({
+      //   map: map,
+      //   position: myLatlng,
+      //   content: 'You are here'
+      // });
 
       map.setCenter(myLatlng);
 
@@ -102,18 +102,21 @@ function TaxiDirections(){
           var marker = new google.maps.Marker({
             position: ParLatlng,
             map: map,
+            icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
             animation: google.maps.Animation.DROP,
-            title:"Hello World!"
+            title: data[i].name
           });
 
           markers.push(marker);
 
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(data[i]);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
+          google.maps.event.addListener(marker, 'click', function() {
+              var infowindow = new google.maps.InfoWindow({
+                content: this.title
+              });
+
+              infowindow.open(map, this);
+              console.log(this.title);
+          });//(marker, i));
         };
       }, "json");
 
