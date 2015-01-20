@@ -15,7 +15,11 @@ parking_list = [
   [ "Centro Comercial Rio Sur", 0, 0, 6.198918, -75.573622 ],
   [ "Centro Comercial Unicentro", 0, 0, 6.240302, -75.586703 ],
   [ "Centro Comercial San Diego", 3000, 0, 6.236322, -75.569305 ],
-  [ "Centro Comercial Premium Plaza", 0, 0, 6.229155, -75.570013 ]
+  [ "Centro Comercial Premium Plaza", 0, 0, 6.229155, -75.570013 ],
+  [ "Parqueadero Mega", 1000, 0, 6.170110, -75.613189 ],
+  [ "Parqueadero la Alpujarra", 2000, 0, 6.241967, -75.574967 ],
+  [ "El pulpo de la 50", 1500, 0, 6.243820, -75.570209 ]
+  
 ]
 
 parking_list.each do |name, priceperhour, priceperday, latitude, longitude|

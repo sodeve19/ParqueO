@@ -143,7 +143,6 @@ function ParkingLots(){
             map: map,
             icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
             animation: google.maps.Animation.DROP,
-            draggable:true,
             title: data[i].name
           });
 

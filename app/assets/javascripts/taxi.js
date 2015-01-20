@@ -9,6 +9,7 @@ var markers = [];
 var place;
 var start;
 var end;
+var cheapestPark;
 
 //$(document).on("ready page:load", function() {
 function TaxiDirections(){
@@ -183,7 +184,7 @@ function calcRoute() {
       }
 
       document.getElementById('taxi-dis').innerHTML =
-        "<strong>Costo del taxi: </strong>" + Math.round(costo) + " pesos";
+        "<strong>Costo aproximado del taxi: </strong>" + Math.round(costo) + " pesos";
 
 
       directionsDisplay.setDirections(response);
