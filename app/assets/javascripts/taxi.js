@@ -9,6 +9,8 @@ var markers = [];
 var place;
 var start;
 var end;
+var cheapestPark = {};
+
 
 //$(document).on("ready page:load", function() {
 function TaxiDirections(){
@@ -104,20 +106,44 @@ function TaxiDirections(){
             map: map,
             icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
             animation: google.maps.Animation.DROP,
-            title: data[i].name
+            title: data[i].name,
+            price: data[i].priceperhour
           });
+
+
+          console.log(data[i].priceperhour);
+          
+          
+          if(i != 0){
+            if ( data[i].priceperhour < cheapestPark.price ){
+              cheapestPark.price = data[i].priceperhour;
+              cheapestPark.name = data[i].name;
+              cheapestPark.position = ParLatlng;
+            }
+          } else {
+            cheapestPark.price = data[i].priceperhour;
+            cheapestPark.name = data[i].name;
+            cheapestPark.position = ParLatlng;
+          }
+
 
           markers.push(marker);
 
           google.maps.event.addListener(marker, 'click', function() {
               var infowindow = new google.maps.InfoWindow({
-                content: this.title
+                content: "<div>" +  this.title + "</div>" + "Precio por hora: " + this.price
               });
 
               infowindow.open(map, this);
-              console.log(this.title);
+              console.log(this.price);
           });//(marker, i));
+
+        
         };
+
+        //console.log("cheapestPark " + cheapestPark.name);
+        //$('#taxi').addClass('index-z');
+        
       }, "json");
 
     }
@@ -161,17 +187,37 @@ function calcRoute() {
       travelMode: google.maps.TravelMode.DRIVING
   };
 
+
+    // console.log("Hola cheapestPark" );
+    // console.log(cheapestPark.position );
+    // console.log( cheapestPark.name);
+
+
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
+      //clearMarkers()
+      var marker = new google.maps.Marker({
+        position: cheapestPark.position,
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png',
+        animation: google.maps.Animation.DROP,
+        title: cheapestPark.name,
+        price: cheapestPark.price
+      });
 
       $('#taxi').addClass('index-z');
-      // Display the distance:
-     document.getElementById('distance').innerHTML = 
-        "<strong>Distancia: </strong>" + Math.round(response.routes[0].legs[0].distance.value / 1000) + " km";
+      //$("<%= j render partial: 'modal' %>").modal();
+      //$('#myModal').modal('show');
+      document.getElementById('parqueo').innerHTML = 
+        "<strong>El parqueo más barato vale: </strong>" + cheapestPark.price + " <pesos></pesos> por hora y es " + cheapestPark.name;
 
-     // Display the duration:
-     document.getElementById('duration').innerHTML = 
-        "<strong>Duración: </strong>" + Math.round(response.routes[0].legs[0].duration.value / 60 ) + " mins";
+      //Display the distance:
+      document.getElementById('distance').innerHTML = 
+         "Tu destino está a " + Math.round(response.routes[0].legs[0].distance.value / 1000) + " km de distancia y tiene una duración estimada de " + Math.round(response.routes[0].legs[0].duration.value / 60 ) + " mins";
+
+      //Display the duration:
+      // document.getElementById('duration').innerHTML = 
+      //    "Duración: " + Math.round(response.routes[0].legs[0].duration.value / 60 ) + " mins";
 
       var time = (response.routes[0].legs[0].duration.value / 60 );
       var distance = (response.routes[0].legs[0].distance.value / 78);
@@ -183,7 +229,7 @@ function calcRoute() {
       }
 
       document.getElementById('taxi-dis').innerHTML =
-        "<strong>Costo del taxi: </strong>" + Math.round(costo) + " pesos";
+        "<strong>Costo aproximado del taxi: </strong>" + Math.round(costo) + " pesos";
 
 
       directionsDisplay.setDirections(response);
