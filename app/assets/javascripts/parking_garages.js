@@ -46,7 +46,7 @@ function ParkingLots(){
 
       // ------- AÑADO GET
       $.get("/parking_garages", { latitude: position.coords.latitude, longitude: position.coords.longitude } , function( data ) {
-        console.log(data);
+        console.log("PRIMER GET");
         for(var i = 0; i < data.length; i++) {
           console.log(data[i]);
           var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
@@ -59,6 +59,19 @@ function ParkingLots(){
             title: data[i].name
           });
 
+          if(i != 0){
+            if ( data[i].priceperhour < cheapestPark.price ){
+              cheapestPark.price = data[i].priceperhour;
+              cheapestPark.name = data[i].name;
+              cheapestPark.position = ParLatlng;
+            }
+          } else {
+            cheapestPark.price = data[i].priceperhour;
+            cheapestPark.name = data[i].name;
+            cheapestPark.position = ParLatlng;
+          }
+
+
           markers.push(marker);
 
           google.maps.event.addListener(marker, 'click', function() {
@@ -67,14 +80,17 @@ function ParkingLots(){
               });
 
               infowindow.open(map, this);
-              console.log(this.title);
+              //console.log(this.title);
           });//(marker, i));
         };
+
+        console.log("cheapestPark " + cheapestPark.name);
+        $('#parque-panel').addClass('index-z');
+        $('#parque').append("El parqueadero más barato es <strong>" + cheapestPark.name + "</strong> y vale <strong>" + cheapestPark.price + "</strong> pesos");
+
       }, "json");
       
       // ------- FIN GET
-
-
 
     }, function() {
       handleNoGeolocation(true);
@@ -83,6 +99,7 @@ function ParkingLots(){
     // Browser doesnt support Geolocation
     handleNoGeolocation(false);
   };
+
 
   //--------- INPUT SEARCH INIT
   var input = document.getElementById('pac-input');
@@ -127,11 +144,12 @@ function ParkingLots(){
       markers.push(marker);
 
       bounds.extend(place.geometry.location);
-      console.log(place.geometry.location.k);
+      // console.log(place.geometry.location.k);
 
-      console.log(place.geometry.location.D);
+      // console.log(place.geometry.location.D);
 
       $.get("/parking_garages", { latitude: place.geometry.location.k, longitude: place.geometry.location.D } , function( data ) {
+        console.log("GET");
         console.log(data);
 
         for(var i = 0; i < data.length; i++) {
@@ -157,6 +175,7 @@ function ParkingLots(){
               console.log(this.title);
           });
         };
+
       }, "json");
 
     }
@@ -213,6 +232,9 @@ function ParkingLots(){
   //   };
   // }, "json");
 //});
+
+  
+
 
 }
 

@@ -95,3 +95,22 @@ form .actions { text-align: right; }
 }
 
 .projects .projects-list { margin-top: 30px; }
+
+.delete {
+  font-weight: bold;
+  float: right;
+  cursor: default;
+  display: inline-block;
+}
+
+
+
+
+
+
+
+
+
+
+
+

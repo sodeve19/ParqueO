@@ -3,5 +3,6 @@ json.array!(@parking_garages) do |parking_garage|
   json.extract! parking_garage, :latitude
   json.extract! parking_garage, :longitude
   json.extract! parking_garage, :name
+  json.extract! parking_garage, :priceperhour
   json.url parking_garage_url(parking_garage, format: :json)
 end
