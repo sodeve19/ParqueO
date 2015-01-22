@@ -10,6 +10,8 @@ var place;
 var start;
 var end;
 var cheapestPark = {};
+var k = 0;
+var SPmarker;
 
 
 //$(document).on("ready page:load", function() {
@@ -195,16 +197,23 @@ function calcRoute() {
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
-      //clearMarkers()
-      var marker = new google.maps.Marker({
+      
+      if ( k != 0){
+        deleteMarker(SPmarker);
+      }
+
+
+      SPmarker = new google.maps.Marker({
         position: cheapestPark.position,
         map: map,
-        icon: 'http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png',
+        icon: 'http://www.google.com/mapfiles/markerP.png',
         animation: google.maps.Animation.DROP,
         title: cheapestPark.name,
         price: cheapestPark.price
       });
+      k = 1;
 
+      
       $('#taxi').addClass('index-z');
       //$("<%= j render partial: 'modal' %>").modal();
       //$('#myModal').modal('show');
@@ -239,6 +248,10 @@ function calcRoute() {
   });
 }
 
+
+function deleteMarker(marker) {
+  marker.setMap(null);
+}
 
 
 
