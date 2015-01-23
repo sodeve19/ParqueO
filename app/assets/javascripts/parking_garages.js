@@ -60,7 +60,8 @@ function ParkingLots(){
             map: map,
             icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
             animation: google.maps.Animation.DROP,
-            title: data[i].name
+            title: data[i].name,
+            price: data[i].priceperhour
           });
 
           if(i != 0){
@@ -80,7 +81,7 @@ function ParkingLots(){
 
           google.maps.event.addListener(marker, 'click', function() {
               var infowindow = new google.maps.InfoWindow({
-                content: this.title
+                content: "<div>" +  this.title + "</div>" + "Precio por hora: " + this.price
               });
 
               infowindow.open(map, this);
@@ -297,10 +298,10 @@ function updatePosition() {
   };
     //console.log("UPDATE " + position.coords.latitude);
 
-    if ( h != 0 ) {
-      deleteMarker(myPositionCURRENT);
-      //deleteMarkers_mypos(myPositionCURRENT);
-    }
+    // if ( h != 0 ) {
+    //   deleteMarker(myPositionCURRENT);
+    //   //deleteMarkers_mypos(myPositionCURRENT);
+    // }
 
     myPositionCURRENT = new google.maps.Marker({
       position: newLatlng,
@@ -308,6 +309,16 @@ function updatePosition() {
       icon: 'http://maps.google.com/mapfiles/arrow.png',
       title:'You are here'
     });
+
+    if(self.uniqueMarker && self.uniqueMarker.setMap)
+    //Delete old marker from map.
+      self.uniqueMarker.setMap(null);
+      self.uniqueMarker = myPositionCURRENT;
+      // google.maps.event.addListener(marker, 'click', function() {
+      //   if (confirm('Do you want to add inspection details for this property?') === true) {
+      //       Appery.navigateTo('AddDetails');
+      //   }
+      // });
 
     //markers_my_pos.push(myPositionCURRENT);
     console.log(myPositionCURRENT.position);

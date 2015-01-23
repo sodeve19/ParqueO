@@ -249,6 +249,7 @@ function calcRoute() {
 }
 
 function deleteMarker(marker) {
+  console.log("DELETEMARKER");
   marker.setMap(null);
 }
  
