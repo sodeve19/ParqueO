@@ -8,6 +8,8 @@ var myLatlng;
 var parking_garages_link;
 var markers = [];
 var place;
+var h = 0;
+var newLatlng;
 
 
 function ParkingLots(){
@@ -281,7 +283,32 @@ function deleteMarkers() {
   markers = [];
 }
 
+function updatePosition() {
 
+  if(navigator.geolocation) { 
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+      //console.log(position);
+      newLatlng = new google.maps.LatLng(position.coords.latitude,
+                                            position.coords.longitude);
+    });
+  };
+    //console.log("UPDATE " + position.coords.latitude);
+
+    if (myPosition) {
+      myPosition.setMap(null);
+    }
+
+    var myPosition = new google.maps.Marker({
+      position: newLatlng,
+      map: map,
+      icon: 'http://maps.google.com/mapfiles/arrow.png',
+      title:'You are here'
+    });
+    console.log(myPosition.position);
+    //h = 1;
+  
+}
 
 //google.maps.event.addDomListener(window, 'load', initialize);
 
