@@ -248,10 +248,10 @@ function calcRoute() {
   });
 }
 
-
 function deleteMarker(marker) {
   marker.setMap(null);
 }
+ 
 
 
 

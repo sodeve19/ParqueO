@@ -7,9 +7,11 @@ var infowindow;
 var myLatlng;
 var parking_garages_link;
 var markers = [];
+//var markers_my_pos = [];
 var place;
 var h = 0;
 var newLatlng;
+var myPositionCURRENT;
 
 
 function ParkingLots(){
@@ -295,18 +297,21 @@ function updatePosition() {
   };
     //console.log("UPDATE " + position.coords.latitude);
 
-    if (myPosition) {
-      myPosition.setMap(null);
+    if ( h != 0 ) {
+      deleteMarker(myPositionCURRENT);
+      //deleteMarkers_mypos(myPositionCURRENT);
     }
 
-    var myPosition = new google.maps.Marker({
+    myPositionCURRENT = new google.maps.Marker({
       position: newLatlng,
       map: map,
       icon: 'http://maps.google.com/mapfiles/arrow.png',
       title:'You are here'
     });
-    console.log(myPosition.position);
-    //h = 1;
+
+    //markers_my_pos.push(myPositionCURRENT);
+    console.log(myPositionCURRENT.position);
+    h = 1;
   
 }
 
