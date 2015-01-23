@@ -294,7 +294,56 @@ function updatePosition() {
       //console.log(position);
       newLatlng = new google.maps.LatLng(position.coords.latitude,
                                             position.coords.longitude);
+    
+      $.get("/parking_garages", { latitude: position.coords.latitude, longitude: position.coords.longitude } , function( data ) {
+        //console.log("GET EN CURRENT LOCATION");
+        for(var i = 0; i < data.length; i++) {
+          console.log(data[i]);
+          var ParLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+          
+          var marker = new google.maps.Marker({
+            position: ParLatlng,
+            map: map,
+            icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png',
+            //animation: google.maps.Animation.DROP,
+            title: data[i].name,
+            price: data[i].priceperhour
+          });
+
+          if(i != 0){
+            if ( data[i].priceperhour < cheapestPark.price ){
+              cheapestPark.price = data[i].priceperhour;
+              cheapestPark.name = data[i].name;
+              cheapestPark.position = ParLatlng;
+            }
+          } else {
+            cheapestPark.price = data[i].priceperhour;
+            cheapestPark.name = data[i].name;
+            cheapestPark.position = ParLatlng;
+          }
+
+
+          markers.push(marker);
+
+          google.maps.event.addListener(marker, 'click', function() {
+              var infowindow = new google.maps.InfoWindow({
+                content: "<div>" +  this.title + "</div>" + "Precio por hora: " + this.price
+              });
+
+              infowindow.open(map, this);
+              //console.log(this.title);
+          });//(marker, i));
+        };
+
+        console.log("cheapestPark " + cheapestPark.name);
+        //$('#parque-panel').addClass('index-z');
+        $('#parque').html("El parqueadero más barato es <strong>" + cheapestPark.name + "</strong> y vale <strong>" + cheapestPark.price + "</strong> pesos");
+
+      }, "json");
+
+
     });
+
   };
     //console.log("UPDATE " + position.coords.latitude);
 
