@@ -1,5 +1,7 @@
 class ParkingGaragesController < ApplicationController
   before_action :set_parking_garage, only: [:show, :edit, :update, :destroy]
+  include ActionController::Live
+
 
   # GET /parking_garages
   # GET /parking_garages.json
@@ -36,6 +38,22 @@ class ParkingGaragesController < ApplicationController
     @parking_garages = ParkingGarage.near(location, 1, :units => :km)
 
   end
+
+  # def get_position
+  #   response.headers['Content-Type'] = 'text/event-stream'
+  #   sse = SSE.new(response.stream, retry: 300, event: "notification")
+
+  #   begin
+  #     loop do
+  #       sse.write({ lat: Time.now, long:  })
+  #       sleep 1
+  #     end
+  #   rescue
+  #     # log ...
+  #   ensure
+  #     sse.close
+  #   end
+  # end
 
   # GET /parking_garages/1
   # GET /parking_garages/1.json

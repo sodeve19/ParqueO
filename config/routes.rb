@@ -2,9 +2,14 @@ Rails.application.routes.draw do
   get 'taxi/taxi_cost_estimation'
 
   devise_for :users
-  resources :parking_garages
+  resources :parking_garages, only: [:index, :show]
+
   get 'parking' => 'parking_garages#index_no_search'
   get 'pages/home'
+  # get 'parking_garages' => 'parking_garages#index'
+  # post 'parking_garages' => 'parking_garages#index'
+  
+  get 'parking_garages/get_time'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
